@@ -1,5 +1,5 @@
 // Funciones compartidas y gestión de datos
-
+ 
 // Inicializar almacenamiento
 function inicializarAlmacenamiento() {
     if (!localStorage.getItem('pruebas')) {

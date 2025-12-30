@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         guardarPruebaForm();
     });
-});
+}); 
 
 // Agregar pregunta
 function agregarPregunta() {

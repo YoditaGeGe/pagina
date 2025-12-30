@@ -5,7 +5,7 @@ let pruebaActual = null;
 let respuestas = {};
 let tiempoRestante = 0;
 let timerInterval = null;
-
+ 
 // Inicializar
 document.addEventListener('DOMContentLoaded', function() {
     // Verificar si hay un estudiante en sesión
