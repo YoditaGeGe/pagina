@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Pruebas Digitales - Inicio</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="login-card">
+            <h1>📝 Sistema de Pruebas Digitales</h1>
+            <div class="login-options">
+                <button class="btn btn-primary" onclick="mostrarLoginProfesor()">
+                    👨‍🏫 Acceso Profesor
+                </button>
+                <button class="btn btn-secondary" onclick="window.location.href='estudiante.html'">
+                    👨‍🎓 Acceso Estudiante
+                </button>
+            </div>
+            <div class="info-box">
+                <p><strong>Profesor:</strong> Crea pruebas, asigna a estudiantes y revisa resultados</p>
+                <p><strong>Estudiante:</strong> Accede a las pruebas asignadas y completa tu evaluación</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Login Profesor -->
+    <div id="modalLoginProfesor" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="cerrarModalLogin()">&times;</span>
+            <h2>🔐 Acceso Profesor</h2>
+            <form id="formLoginProfesor" onsubmit="validarLoginProfesor(event)">
+                <div class="form-group">
+                    <label>Contraseña:</label>
+                    <input type="password" id="passwordProfesor" required placeholder="Ingresa la contraseña" autofocus>
+                </div>
+                <div id="mensajeError" class="error-message" style="display: none;"></div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Ingresar</button>
+                    <button type="button" class="btn btn-secondary" onclick="cerrarModalLogin()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        function mostrarLoginProfesor() {
+            document.getElementById('modalLoginProfesor').style.display = 'flex';
+            document.getElementById('passwordProfesor').focus();
+        }
+
+        function cerrarModalLogin() {
+            document.getElementById('modalLoginProfesor').style.display = 'none';
+            document.getElementById('formLoginProfesor').reset();
+            document.getElementById('mensajeError').style.display = 'none';
+        }
+
+        function validarLoginProfesor(event) {
+            event.preventDefault();
+            const password = document.getElementById('passwordProfesor').value;
+            const mensajeError = document.getElementById('mensajeError');
+            
+            if (verificarPasswordProfesor(password)) {
+                sessionStorage.setItem('profesorAutenticado', 'true');
+                window.location.href = 'profesor.html';
+            } else {
+                mensajeError.textContent = 'Contraseña incorrecta';
+                mensajeError.style.display = 'block';
+                document.getElementById('passwordProfesor').value = '';
+                document.getElementById('passwordProfesor').focus();
+            }
+        }
+
+        // Cerrar modal al hacer clic fuera
+        window.onclick = function(event) {
+            const modal = document.getElementById('modalLoginProfesor');
+            if (event.target === modal) {
+                cerrarModalLogin();
+            }
+        }
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel del Estudiante</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>👨‍🎓 Panel del Estudiante</h1>
+            <button class="btn btn-back" onclick="window.location.href='index.html'">← Volver</button>
+        </header>
+
+        <!-- Vista: Selección de Estudiante -->
+        <div id="vistaSeleccion" class="card">
+            <h2>Identifícate</h2>
+            <p style="color: #666; margin-bottom: 20px;">Ingresa tu nombre completo para acceder a las pruebas</p>
+            <div class="form-group">
+                <label>Tu Nombre: <span style="color: #dc3545;">*</span></label>
+                <input type="text" id="nombreEstudiante" placeholder="Ej: Juan Pérez" required 
+                       onkeypress="if(event.key === 'Enter') iniciarSesionEstudiante()">
+                <small style="color: #666; margin-top: 5px; display: block;">
+                    Solo letras y espacios. Mínimo 2 caracteres.
+                </small>
+            </div>
+            <div id="mensajeErrorNombre" style="display: none; margin-bottom: 15px;"></div>
+            <button class="btn btn-primary" onclick="iniciarSesionEstudiante()">Continuar</button>
+        </div>
+
+        <!-- Vista: Lista de Pruebas -->
+        <div id="vistaPruebas" class="tab-content" style="display: none;">
+            <div class="card">
+                <h2>Pruebas Disponibles</h2>
+                <div id="listaPruebasEstudiante"></div>
+            </div>
+        </div>
+
+        <!-- Vista: Tomar Prueba -->
+        <div id="vistaTomarPrueba" class="tab-content" style="display: none;">
+            <div class="card">
+                <div class="quiz-header">
+                    <h2 id="tituloPruebaActual"></h2>
+                    <div class="timer" id="timer">Tiempo: --:--</div>
+                </div>
+                <div id="preguntasPrueba"></div>
+                <div class="quiz-actions">
+                    <button class="btn btn-primary" onclick="enviarPrueba()">Enviar Prueba</button>
+                    <button class="btn btn-secondary" onclick="cancelarPrueba()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vista: Resultado -->
+        <div id="vistaResultado" class="tab-content" style="display: none;">
+            <div class="card resultado-card">
+                <h2>Resultado de la Prueba</h2>
+                <div class="resultado-info">
+                    <div class="resultado-item">
+                        <span class="label">Puntaje:</span>
+                        <span class="value" id="puntajeFinal">0</span>
+                    </div>
+                    <div class="resultado-item">
+                        <span class="label">Nota:</span>
+                        <span class="value nota" id="notaFinal">0.0</span>
+                    </div>
+                    <div class="resultado-item">
+                        <span class="label">Preguntas Correctas:</span>
+                        <span class="value" id="correctasFinal">0</span>
+                    </div>
+                    <div class="resultado-item">
+                        <span class="label">Total Preguntas:</span>
+                        <span class="value" id="totalFinal">0</span>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="volverAPruebas()">Volver a Pruebas</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="estudiante.js"></script>
+</body>
+</html>
+

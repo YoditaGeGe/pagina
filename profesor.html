@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel del Profesor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>👨‍🏫 Panel del Profesor</h1>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-secondary" onclick="cerrarSesion()">Cerrar Sesión</button>
+                <button class="btn btn-back" onclick="window.location.href='index.html'">← Volver</button>
+            </div>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('crear')">Crear Prueba</button>
+            <button class="tab-btn" onclick="showTab('ver-pruebas')">Ver Pruebas</button>
+            <button class="tab-btn" onclick="showTab('resultados')">Resultados</button>
+            <button class="tab-btn" onclick="showTab('configuracion')">⚙️ Configuración</button>
+        </div>
+
+        <!-- Tab: Crear Prueba -->
+        <div id="crear" class="tab-content active">
+            <div class="card">
+                <h2>Crear Nueva Prueba</h2>
+                <form id="formCrearPrueba">
+                    <div class="form-group">
+                        <label>Título de la Prueba:</label>
+                        <input type="text" id="tituloPrueba" required placeholder="Ej: Examen de Matemáticas">
+                    </div>
+                    <div class="form-group">
+                        <label>Descripción:</label>
+                        <textarea id="descripcionPrueba" rows="3" placeholder="Descripción de la prueba"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Tiempo límite (minutos):</label>
+                        <input type="number" id="tiempoLimite" min="1" value="30" required>
+                    </div>
+                    <div id="preguntasContainer"></div>
+                    <button type="button" class="btn btn-add" onclick="agregarPregunta()">+ Agregar Pregunta</button>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Guardar Prueba</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tab: Ver Pruebas -->
+        <div id="ver-pruebas" class="tab-content">
+            <div class="card">
+                <h2>Pruebas Creadas</h2>
+                <div id="listaPruebas"></div>
+            </div>
+        </div>
+
+        <!-- Tab: Resultados -->
+        <div id="resultados" class="tab-content">
+            <div class="card">
+                <h2>Resultados de Estudiantes</h2>
+                <div class="filters">
+                    <select id="filtroPrueba" onchange="filtrarResultados()">
+                        <option value="">Todas las pruebas</option>
+                    </select>
+                </div>
+                <div id="resultadosContainer"></div>
+            </div>
+        </div>
+
+        <!-- Tab: Configuración -->
+        <div id="configuracion" class="tab-content">
+            <div class="card">
+                <h2>⚙️ Configuración</h2>
+                <div class="form-group">
+                    <label>Cambiar Contraseña del Profesor:</label>
+                    <input type="password" id="nuevaPassword" placeholder="Nueva contraseña" style="margin-bottom: 10px;">
+                    <input type="password" id="confirmarPassword" placeholder="Confirmar contraseña">
+                    <button class="btn btn-primary" onclick="cambiarPassword()" style="margin-top: 10px;">Cambiar Contraseña</button>
+                    <div id="mensajePassword" style="margin-top: 15px;"></div>
+                </div>
+                <div class="info-box" style="margin-top: 30px;">
+                    <p><strong>Nota:</strong> La contraseña por defecto es "profesor123". Cámbiala por seguridad.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vista de Login si no está autenticado -->
+    <div id="vistaLogin" class="tab-content" style="display: none;">
+        <div class="card">
+            <h2>🔐 Acceso Restringido</h2>
+            <p>Debes iniciar sesión para acceder al panel del profesor.</p>
+            <button class="btn btn-primary" onclick="window.location.href='index.html'">Volver al Inicio</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Verificar autenticación al cargar
+        if (!verificarAutenticacionProfesor()) {
+            document.body.innerHTML = `
+                <div class="container">
+                    <div class="card">
+                        <h2>🔐 Acceso Restringido</h2>
+                        <p>Debes iniciar sesión para acceder al panel del profesor.</p>
+                        <button class="btn btn-primary" onclick="window.location.href='index.html'">Volver al Inicio</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function cerrarSesion() {
+            sessionStorage.removeItem('profesorAutenticado');
+            window.location.href = 'index.html';
+        }
+
+        function cambiarPassword() {
+            const nuevaPassword = document.getElementById('nuevaPassword').value;
+            const confirmarPassword = document.getElementById('confirmarPassword').value;
+            const mensaje = document.getElementById('mensajePassword');
+            
+            if (!nuevaPassword || !confirmarPassword) {
+                mensaje.innerHTML = '<p style="color: #dc3545;">Por favor completa ambos campos</p>';
+                return;
+            }
+            
+            if (nuevaPassword !== confirmarPassword) {
+                mensaje.innerHTML = '<p style="color: #dc3545;">Las contraseñas no coinciden</p>';
+                return;
+            }
+            
+            if (nuevaPassword.length < 4) {
+                mensaje.innerHTML = '<p style="color: #dc3545;">La contraseña debe tener al menos 4 caracteres</p>';
+                return;
+            }
+            
+            cambiarPasswordProfesor(nuevaPassword);
+            mensaje.innerHTML = '<p style="color: #28a745;">✓ Contraseña cambiada exitosamente</p>';
+            document.getElementById('nuevaPassword').value = '';
+            document.getElementById('confirmarPassword').value = '';
+        }
+    </script>
+    <script src="profesor.js"></script>
+</body>
+</html>
+
